@@ -42,3 +42,4 @@ To leave the environment on any operating system, run `deactivate`.
 
 If your editor asks you to choose a Python interpreter or notebook kernel,
 select the one inside `.venv`.
+https://app.notion.com/p/AI-Based-Resume-Skill-Gap-Analyzer-4-Week-Project-Plan-7b84a33211ba4f2993b8569ef2564d35?source=copy_link 05d49787fb0b99b1ccfd501b01eda5c27ea3a02b
