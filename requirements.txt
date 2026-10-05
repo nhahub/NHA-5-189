@@ -1,0 +1,10 @@
+# Runtime and notebook dependencies
+certifi
+ipykernel
+jupyterlab
+matplotlib
+nltk
+pandas
+scikit-learn
+seaborn
+spacy
