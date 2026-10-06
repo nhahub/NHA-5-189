@@ -5,6 +5,8 @@ jupyterlab
 matplotlib
 nltk
 pandas
+PyPDF2
+python-docx
 scikit-learn
 seaborn
 spacy
