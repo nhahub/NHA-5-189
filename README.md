@@ -27,7 +27,9 @@ depi_gapAnalyzer/
 │   └── main.py
 └── data/
     ├── raw/
-    │   └── jobs.csv
+    │   ├── cv.csv
+    │   ├── job.csv
+    │   └── matches.csv
     ├── processed/
     │   ├── final_cleaned_cv.csv
     │   └── final_cleaned_jobs.csv
@@ -41,8 +43,8 @@ depi_gapAnalyzer/
 
 | File | Purpose |
 | --- | --- |
-| Notebook 01 | Loads sample data, checks quality, preprocesses text, saves processed CSVs and shows EDA. |
-| Notebook 02 | Loads processed CSVs, restores skill lists, then runs the original extraction, similarity, optimization and evaluation cells. |
+| Notebook 01 | Loads all raw CVs, jobs and matches, checks quality, preprocesses text, saves processed CV/job CSVs and shows EDA. |
+| Notebook 02 | Loads full processed CSVs, checks raw ID coverage, restores skill lists, then runs extraction, similarity, optimization and evaluation. |
 | Notebook 03 | Markdown placeholder for embeddings and model comparison in Milestone 3. |
 | `src/preprocessing.py` | Document parsing, section extraction, text cleaning and NLP setup functions. |
 | `src/skill_extraction.py` | Functions for dictionary construction, both EntityRuler setup stages and skill extraction. |
@@ -63,11 +65,24 @@ comparison and evaluation. Function implementations live only in `src/`.
 The modules accept their dependencies as arguments and do not load datasets,
 download NLTK resources or evaluate models on import. The notebooks use `partial`
 to attach shared inputs while retaining familiar calls such as
-`extract_skills(text)` and `analyze_match(3, 3)`. Original calculations, filters,
-printed metrics and chart settings are preserved. Repeated superseded function
-definitions have been consolidated into their effective implementation; their
-original versions remain in Git. Outputs were cleared because the cell layout
-and calls changed, and the notebooks have not been rerun.
+`extract_skills(text)` and `analyze_match(3, 3)`. The preprocessing calculations,
+extraction filters and chart settings are preserved. Baseline and optimized metrics are both calculated from the loaded
+full resume dataset. Repeated superseded function definitions have been consolidated into their effective implementation; their
+original versions remain in Git. The notebooks run in sequence: Notebook 01
+regenerates full processed data; Notebook 02 consumes those exports.
+
+## Downloading the full datasets
+
+The full raw and processed CV files are stored with Git LFS. Install Git LFS on
+your machine, then run these commands from the cloned repository before opening
+the notebooks:
+
+```bash
+git lfs install
+git lfs pull
+```
+
+This downloads the actual CSV contents in place of Git LFS pointer files.
 
 ## Python environment setup
 
@@ -117,14 +132,14 @@ The future milestone notebook can be opened with:
 jupyter lab notebooks/03_embeddings_and_model_comparison.ipynb
 ```
 
-Notebook kernels should run with `notebooks/` as their working directory so the
-existing relative-path style (`../data/...`) resolves correctly. If using an
-editor instead of Jupyter, set its notebook working directory accordingly.
+Notebook kernels can run from the project root or `notebooks/`. Both notebooks
+resolve their data paths from the project root.
 
 Notebook 01 still contains the original NLTK resource downloads and CSV writes.
-Running it can download resources and overwrite the two processed CSVs. Notebook
-02 uses those CSVs and copies the original skill-list conversion cells into its
-setup, so it does not require Notebook 01's in-memory variables. Install packages
+Running it can download resources and overwrite the two processed CSVs. Run
+Notebook 01 before Notebook 02. Notebook 02 rejects old sample exports when their
+candidate or job IDs do not cover the raw datasets, and restores skill lists
+without requiring Notebook 01's in-memory variables. Install packages
 with `requirements.txt` before execution; `%pip install` lines were removed from
 the notebooks. PDF and DOCX support uses the original `PyPDF2` and `python-docx`.
 
@@ -135,18 +150,25 @@ select the one inside `.venv`.
 
 ## Data and preservation notes
 
-- `data/raw/jobs.csv` is the original `data/job.csv`, renamed without changing its contents.
-- `data/processed/` keeps the `final_cleaned_*.csv` filenames from the requested tree.
-- `data/sample/` contains the three original small datasets.
-- Original full `cv.csv` and `matches.csv` were not present; no substitutes were created.
+- The active inputs are `data/raw/cv.csv` (9,544 rows), `data/raw/job.csv`
+  (1,167 rows), and `data/raw/matches.csv` (122,560 rows). Every row is loaded;
+  there is no sampling or row limit.
+- `data/processed/` keeps the `final_cleaned_*.csv` filenames, regenerated from
+  the full raw CV and job files using the existing cleaning pipeline.
+- `data/sample/` retains the three small datasets for reference; the active
+  notebooks do not use them.
+- Match records are checked for missing values, duplicates, CV/job references,
+  coverage and supplied score distribution in Notebook 01. They are not
+  substituted for the skill reference labels used to evaluate extraction.
+- `.head()` displays and individual match examples remain as previews;
+  preprocessing, charts, skill dictionaries and aggregate evaluation use all rows.
 - The original helper scripts are preserved verbatim in the reference appendix below.
 - The original notebook and helper scripts are preserved in Git commit
   `66c9d4776e46660307f933c9168cc98be355c670`. For example, inspect the original with
   `git show 66c9d4776e46660307f933c9168cc98be355c670:src/resume_skill_gap.ipynb`.
-- The original preprocessing documentation and EDA findings remain in Notebook 01.
-  Fixed printed baseline metrics are retained. Function bodies keep their original
-  calculations, with data dependencies passed as arguments. Notebook outputs were
-  cleared during the readability update; original outputs remain in Git.
+- Notebook 01 derives category and skill findings from the current data.
+  Notebook 02 compares measured baseline and optimized scores on all resumes,
+  replacing the old fixed sample baseline. The original analysis remains in Git.
 
 Embeddings, the API and Docker deployment are planned for later milestones.
 There is no frontend in this structure.

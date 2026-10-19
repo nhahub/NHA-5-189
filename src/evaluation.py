@@ -131,13 +131,16 @@ def evaluate_optimized_resumes(cv, extract_skills_optimized):
     print("Optimized Average F1-score:", round(optimized_f1, 2))
     return optimized_precision, optimized_recall, optimized_f1
 
-def compare_evaluation_results(optimized_precision, optimized_recall, optimized_f1):
-    # Compare model performance before and after optimization
+def compare_evaluation_results(
+    optimized_precision, optimized_recall, optimized_f1,
+    baseline_precision, baseline_recall, baseline_f1,
+):
+    # Compare metrics measured on the same loaded dataset
 
     print("Before Optimization")
-    print("Precision: 0.76")
-    print("Recall: 0.98")
-    print("F1-score: 0.85")
+    print("Precision:", round(baseline_precision, 2))
+    print("Recall:", round(baseline_recall, 2))
+    print("F1-score:", round(baseline_f1, 2))
 
     print("\nAfter Optimization")
     print("Precision:", round(optimized_precision, 2))
