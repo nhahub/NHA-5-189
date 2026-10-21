@@ -1,77 +1,147 @@
-# DEPI Gap Analyzer
+# AI-Based Resume Skill Gap Analyzer
 
-Graduation project for extracting skills from resumes and comparing them with job
-descriptions to identify matched and missing skills. Milestones 1 and 2 contain
-the original preprocessing, EDA, skill extraction, TF-IDF and evaluation work.
+**DEPI — AI & Data Science Track**
 
-## Project structure
+## Project Overview
+
+We are building an NLP tool that compares a candidate's resume with a target job description, identifies matched and missing skills, and reports skill coverage and text similarity. The planned final application will let users upload a resume, paste a job description, and view the results through a web interface.
+
+The current implementation runs in Jupyter notebooks and reusable Python modules. Data preprocessing and EDA are documented, and the skill-extraction and TF-IDF matching baseline has been implemented and evaluated. The web application, contextual embeddings, cloud deployment, and monitoring remain planned work.
+
+This README documents the implemented workflow, project structure, evaluation results, known limitations, and future improvements. It also explains how to run the existing notebooks and validation script.
+
+## Work Completed
+
+### Data Collection, Preprocessing, and Exploration
+
+We loaded the full [Job-Resume Matching Dataset](https://huggingface.co/datasets/nonameee12233/job-resume-matching) from the local CSV files:
+
+| Dataset | Local file | Records | Raw columns |
+|---|---|---:|---:|
+| Resumes | `data/raw/cv.csv` | 9,544 | 11 |
+| Job descriptions | `data/raw/job.csv` | 1,167 | 10 |
+| Candidate–job matches | `data/raw/matches.csv` | 122,560 | 13 |
+
+We inspected schemas, missing values, duplicates, text examples, and match references. The preprocessing pipeline extracts resume sections, lowercases text, removes URLs and unwanted characters, normalizes whitespace, tokenizes, removes English stopwords, and applies WordNet lemmatization. It saves the full processed resume and job datasets for the next notebook.
+
+The EDA examines processed resume lengths, the top ten resume and required-job skills, job-category balance, the top five required skills per domain, and supplied match-score statistics.
+
+**Key findings:**
+
+- No missing values or exact duplicate rows were found in the three raw datasets.
+- Processed resumes have a median length of 137 words and a mean of 145.58 words.
+- Python and machine learning lead the supplied resume skill labels; adaptability leads the supplied required-job labels.
+- The five job categories are nearly balanced, with 220–240 postings per category.
+- Match records cover 9,532 candidates and 1,164 jobs, with no unknown candidate or job references. Twelve candidates and three jobs have no match records.
+
+**Deliverables:** [Notebook 01](notebooks/01_data_preprocessing_and_eda.ipynb), [preprocessing module](src/preprocessing.py), [processed datasets](data/processed/), and the [complete EDA report](reports/Milestone_1_EDA_Report.md). The report includes the preprocessing documentation, original charts, findings, and limitations.
+
+### Skill Extraction, Similarity, and Gap Analysis
+
+We built a dictionary from the supplied resume and job skill lists and used spaCy's `EntityRuler` to recognize matching skill phrases. The initial dictionary contains 8,078 unique labels. Filtering 13 generic terms reduces it to 8,065 labels for the optimized extractor.
+
+Implemented functionality includes:
+
+- Extracting skills from cleaned resume and job text.
+- Identifying matched skills by set intersection and missing skills by subtracting resume skills from job requirements.
+- Calculating skill-match percentage as matched skills divided by extracted job skills, with zero returned when no job skills are extracted.
+- Representing processed text with TF-IDF and calculating cosine similarity.
+- Returning the resume position, job title, matched skills, missing skills, skill-match percentage, and text-similarity percentage through `analyze_match()`.
+- Comparing baseline and filtered-dictionary extraction results against the supplied resume skill labels.
+
+The notebook pipeline fits TF-IDF to each selected resume/job pair and reports skill coverage and text similarity separately. These percentages are descriptive matching scores, not probabilities of hiring success.
+
+**Deliverables:** [Notebook 02](notebooks/02_skill_extraction_and_similarity.ipynb), [skill extraction](src/skill_extraction.py), [similarity functions](src/similarity.py), [analysis pipeline](src/pipeline.py), [evaluation functions](src/evaluation.py), and the [model evaluation report](reports/model_evaluation/MODEL_EVALUATION_REPORT.md).
+
+## Evaluation Results
+
+### Skill Extraction Across All Resumes
+
+The saved Notebook 02 outputs report the following averages of per-resume precision, recall, and F1 across all 9,544 resumes:
+
+| Metric | Baseline dictionary | Filtered dictionary |
+|---|---:|---:|
+| Precision | 0.56 | 0.57 |
+| Recall | 0.97 | 0.96 |
+| F1-score | 0.70 | 0.70 |
+
+Filtering generic terms slightly improves precision while reducing recall; F1 remains unchanged at the displayed precision. High recall means many reference skills are found, but lower precision indicates false positives relative to the supplied labels.
+
+The dictionary is built from the same loaded datasets used for evaluation. These are descriptive in-dataset results, not held-out generalization estimates, and the supplied labels have not been independently audited.
+
+### Ranking Validation on a Candidate Subset
+
+The separate [ranking validation script](src/ranking_validation.py) uses a shared TF-IDF vector space and a fixed weighted score of **70% text similarity + 30% supplied skill overlap**. This is a separate baseline from the notebook's pairwise analysis, and it uses supplied skill lists rather than the extractor's predicted skills. The weights are illustrative, not experimentally optimized.
+
+| Metric | Recorded result |
+|---|---:|
+| Valid candidate–job pairs | 348 |
+| Candidates evaluated | 30 |
+| Mean Spearman correlation | 0.1809 |
+| Mean NDCG@5 | 0.9696 |
+| Top-1 agreement | 30% (9 of 30 candidates) |
+
+These values were checked against the saved [per-candidate metrics](reports/ranking_validation/ranking_metrics_by_candidate.csv). [Pair predictions](reports/ranking_validation/ranking_pair_predictions.csv) are also available. The ranking script defaults to the small candidate file, unlike the full-data preprocessing and extraction notebooks.
+
+The reference match scores are precomputed proxies rather than human relevance judgments. Weak rank correlation and 30% top-1 agreement indicate substantial disagreement despite the high NDCG@5. This validation does not establish full-dataset or real-world matching accuracy.
+
+## Challenges and Limitations
+
+- **Parsing:** CSV-based analysis does not measure PDF/DOCX parsing accuracy. Complex layouts, nonstandard section headings, and joined words need targeted validation.
+- **Skill recognition:** Generic terms cause false positives; exact dictionary matching does not reliably handle unfamiliar skills or equivalent terminology. Punctuation-sensitive names also need review.
+- **Evaluation:** Held-out extraction evaluation, broader ranking validation, and independent label review remain necessary.
+- **Semantic matching:** TF-IDF measures lexical overlap. Transformer-based matching and comparison with the current baseline are not implemented yet.
+- **Application delivery:** There is no functioning API, frontend, cloud deployment, experiment tracking, or monitoring in the current repository.
+
+## Future Work
+
+- Implement sentence-transformer embeddings and compare their results with the TF-IDF baseline in Notebook 03.
+- Expand validation with a suitable held-out split, domain-level results, and independently reviewed examples.
+- Implement the FastAPI backend and connect document parsing, preprocessing, skill extraction, and matching.
+- Build the resume-upload and job-description interface, displaying matched skills, missing skills, and scores.
+- Complete Docker and cloud deployment, then add experiment tracking and monitoring.
+- Test the integrated workflow and prepare screenshots, the final report, presentation, and demo.
+
+## Project Structure
 
 ```text
 depi_gapAnalyzer/
 ├── README.md
 ├── requirements.txt
-├── .gitignore
-├── Dockerfile
+├── Dockerfile                         # Deployment placeholder
 ├── notebooks/
 │   ├── 01_data_preprocessing_and_eda.ipynb
 │   ├── 02_skill_extraction_and_similarity.ipynb
-│   └── 03_embeddings_and_model_comparison.ipynb
+│   └── 03_embeddings_and_model_comparison.ipynb  # Placeholder
 ├── src/
 │   ├── preprocessing.py
 │   ├── skill_extraction.py
 │   ├── similarity.py
-│   ├── embeddings.py
+│   ├── pipeline.py
 │   ├── evaluation.py
-│   └── pipeline.py
+│   ├── ranking_validation.py
+│   └── embeddings.py                  # Placeholder
 ├── api/
-│   └── main.py
-└── data/
-    ├── raw/
-    │   ├── cv.csv
-    │   ├── job.csv
-    │   └── matches.csv
-    ├── processed/
-    │   ├── final_cleaned_cv.csv
-    │   └── final_cleaned_jobs.csv
-    └── sample/
-        ├── small_cv.csv
-        ├── small_jobs.csv
-        └── small_matches.csv
+│   └── main.py                        # Placeholder
+├── data/
+│   ├── raw/                           # Full source CSVs
+│   ├── processed/                     # Full cleaned CV/job exports
+│   └── sample/                        # Small reference datasets
+└── reports/
+    ├── Milestone_1_EDA_Report.md
+    ├── eda_figures/                    # Images used by the EDA report
+    ├── model_evaluation/
+    │   └── MODEL_EVALUATION_REPORT.md
+    └── ranking_validation/
+        ├── ranking_metrics_by_candidate.csv
+        └── ranking_pair_predictions.csv
 ```
 
-## Responsibilities
+## Running the Existing Work
 
-| File | Purpose |
-| --- | --- |
-| Notebook 01 | Loads all raw CVs, jobs and matches, checks quality, preprocesses text, saves processed CV/job CSVs and shows EDA. |
-| Notebook 02 | Loads full processed CSVs, checks raw ID coverage, restores skill lists, then runs extraction, similarity, optimization and evaluation. |
-| Notebook 03 | Markdown placeholder for embeddings and model comparison in Milestone 3. |
-| `src/preprocessing.py` | Document parsing, section extraction, text cleaning and NLP setup functions. |
-| `src/skill_extraction.py` | Functions for dictionary construction, both EntityRuler setup stages and skill extraction. |
-| `src/similarity.py` | Functions for skill comparison, filtering and percentages; provides the TF-IDF tools used by the pipeline. |
-| `src/evaluation.py` | Callable precision, recall, F1 and comparison calculations. |
-| `src/pipeline.py` | The original `analyze_match` body with explicit data and extractor arguments; prints and return value are unchanged. |
-| `src/embeddings.py` | Docstring placeholder for Milestone 3. |
-| `api/main.py` | Docstring placeholder for FastAPI in Milestone 3. |
-| `Dockerfile` | Comment-only placeholder for cloud deployment; not yet buildable. |
-| `requirements.txt` | Packages used by the existing notebooks and Jupyter environment. |
-| `.gitignore` | Excludes environments, caches and local settings from Git. |
+The implemented workflow uses Python, pandas, NLTK, spaCy, scikit-learn, Matplotlib, Seaborn, and JupyterLab. PDF and DOCX helpers use PyPDF2 and python-docx. The rule-based spaCy pipeline uses `spacy.blank("en")`, so it does not require downloading a pretrained spaCy model.
 
-Both active notebooks have one import cell, large numbered section headings and
-a descriptive label before every code cell. Notebook 01 completes preprocessing
-before EDA and visualization. Notebook 02 calls imported functions for extraction,
-comparison and evaluation. Function implementations live only in `src/`.
-
-The modules accept their dependencies as arguments and do not load datasets,
-download NLTK resources or evaluate models on import. The notebooks use `partial`
-to attach shared inputs while retaining familiar calls such as
-`extract_skills(text)` and `analyze_match(3, 3)`. The preprocessing calculations,
-extraction filters and chart settings are preserved. Baseline and optimized metrics are both calculated from the loaded
-full resume dataset. Repeated superseded function definitions have been consolidated into their effective implementation; their
-original versions remain in Git. The notebooks run in sequence: Notebook 01
-regenerates full processed data; Notebook 02 consumes those exports.
-
-## Downloading the full datasets
+### Download the Full Datasets
 
 The full raw and processed CV files are stored with Git LFS. Install Git LFS on
 your machine, then run these commands from the cloned repository before opening
@@ -84,12 +154,12 @@ git lfs pull
 
 This downloads the actual CSV contents in place of Git LFS pointer files.
 
-## Python environment setup
+### Python Environment Setup
 
 Use Python 3.11 or newer. The virtual environment is stored in `.venv`; it is
 local to your computer and intentionally excluded from Git.
 
-### Linux and macOS
+#### Linux and macOS
 
 ```bash
 python3 -m venv .venv
@@ -98,7 +168,7 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-### Windows PowerShell
+#### Windows PowerShell
 
 ```powershell
 py -m venv .venv
@@ -107,7 +177,7 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-### Windows Command Prompt
+#### Windows Command Prompt
 
 ```bat
 py -m venv .venv
@@ -126,12 +196,6 @@ jupyter lab notebooks/01_data_preprocessing_and_eda.ipynb
 jupyter lab notebooks/02_skill_extraction_and_similarity.ipynb
 ```
 
-The future milestone notebook can be opened with:
-
-```bash
-jupyter lab notebooks/03_embeddings_and_model_comparison.ipynb
-```
-
 Notebook kernels can run from the project root or `notebooks/`. Both notebooks
 resolve their data paths from the project root.
 
@@ -148,32 +212,27 @@ To leave the environment on any operating system, run `deactivate`.
 If your editor asks you to choose a Python interpreter or notebook kernel,
 select the one inside `.venv`.
 
-## Data and preservation notes
+### Reproduce the Recorded Ranking Validation
 
-- The active inputs are `data/raw/cv.csv` (9,544 rows), `data/raw/job.csv`
-  (1,167 rows), and `data/raw/matches.csv` (122,560 rows). Every row is loaded;
-  there is no sampling or row limit.
-- `data/processed/` keeps the `final_cleaned_*.csv` filenames, regenerated from
-  the full raw CV and job files using the existing cleaning pipeline.
-- `data/sample/` retains the three small datasets for reference; the active
-  notebooks do not use them.
-- Match records are checked for missing values, duplicates, CV/job references,
-  coverage and supplied score distribution in Notebook 01. They are not
-  substituted for the skill reference labels used to evaluate extraction.
-- `.head()` displays and individual match examples remain as previews;
-  preprocessing, charts, skill dictionaries and aggregate evaluation use all rows.
-- The original helper scripts are preserved verbatim in the reference appendix below.
-- The original notebook and helper scripts are preserved in Git commit
-  `66c9d4776e46660307f933c9168cc98be355c670`. For example, inspect the original with
-  `git show 66c9d4776e46660307f933c9168cc98be355c670:src/resume_skill_gap.ipynb`.
-- Notebook 01 derives category and skill findings from the current data.
-  Notebook 02 compares measured baseline and optimized scores on all resumes,
-  replacing the old fixed sample baseline. The original analysis remains in Git.
+From the project root with the environment activated:
 
-Embeddings, the API and Docker deployment are planned for later milestones.
-There is no frontend in this structure.
+```bash
+python -m src.ranking_validation
+```
 
-## Historical helper scripts
+By default this reads `data/sample/small_cv.csv`, `data/raw/job.csv`, and `data/raw/matches.csv`, then replaces the ranking CSVs under `reports/ranking_validation/`. Use the script's `--cv`, `--jobs`, `--matches`, and `--output` options to change the inputs or output location. Changing the candidate input changes the evaluation scope; the recorded 30-candidate results above should not be assumed to apply to a different run.
+
+## Implementation and Data Notes
+
+- Notebook 01 regenerates full processed data; Notebook 02 checks raw ID coverage before using those exports and restores serialized skill lists.
+- Reusable functions live in `src/`. Importing these modules does not load datasets, download NLTK resources, or run evaluation.
+- The active notebooks use full datasets; previews and example pairs do not restrict aggregate analysis. The separate ranking-validation script uses the candidate subset described above.
+- Keep `reports/eda_figures/` alongside the EDA Markdown file so its images render correctly.
+- `api/main.py` and `src/embeddings.py` contain only placeholder docstrings; the Dockerfile contains only comments and cannot build an application image yet.
+- The original notebook and helper scripts are preserved in Git commit `66c9d4776e46660307f933c9168cc98be355c670`. For example: `git show 66c9d4776e46660307f933c9168cc98be355c670:src/resume_skill_gap.ipynb`.
+
+## Historical Helper Scripts
+
 
 These are reference copies with their original paths, not current execution instructions.
 
