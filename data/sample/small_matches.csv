@@ -1,0 +1,2 @@
+candidate_id,job_id,final_score,raw_score,label_strength,semantic_score,skill_score,position_score,category_score,experience_score,education_score,candidate_rank,candidate_rank_pct
+cand_00011,3884429179,0.6058638612851102,0.444740581056651,medium_positive,0.8345505595207214,0.0,0.2742647058823529,1.0,0.625,1.0,3,0.9818181818181818

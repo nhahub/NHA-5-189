@@ -1,0 +1,12 @@
+# Runtime and notebook dependencies
+certifi
+ipykernel
+jupyterlab
+matplotlib
+nltk
+pandas
+PyPDF2
+python-docx
+scikit-learn
+seaborn
+spacy
