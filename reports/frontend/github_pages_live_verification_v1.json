@@ -1,0 +1,88 @@
+{
+  "site_url": "https://sadeentag.github.io/depi_gapAnalyzer/",
+  "checks": [
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/",
+      "status": 200,
+      "bytes": 669
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/favicon.svg",
+      "status": 200,
+      "bytes": 256
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/assets/index-D98krjhf.js",
+      "status": 200,
+      "bytes": 246565
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/assets/index-CvZkrDXA.css",
+      "status": 200,
+      "bytes": 16229
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/assets/mammoth.browser-BWbH-Juz.js",
+      "status": 200,
+      "bytes": 298504
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/assets/pdf-BHx8b9rl.js",
+      "status": 200,
+      "bytes": 430170
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/assets/pdf.worker.min-CX3E7uHa.js",
+      "status": 200,
+      "bytes": 82
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/assets/pdf.worker.min-CjEcRF4W.mjs",
+      "status": 200,
+      "bytes": 1264342
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/models/milestone3/v1/assets.json",
+      "status": 200,
+      "bytes": 112299
+    },
+    {
+      "url": "https://sadeentag.github.io/depi_gapAnalyzer/methodology.html",
+      "status": 200,
+      "bytes": 7032
+    }
+  ],
+  "model_sha256": "d406bd9d8dadc8ebed53a767b93ee0fce6bf991b960a49b87e1798a40a9fbc6a",
+  "parsing_assets_resolved": {
+    "pdfWorker": true,
+    "pdf": true,
+    "docx": true
+  },
+  "synthetic_reference_cases_passed_in_node": 3,
+  "excluded_paths": [
+    {
+      "path": "tests/browser.html",
+      "status": 404
+    },
+    {
+      "path": "src/main.jsx",
+      "status": 404
+    },
+    {
+      "path": "data/raw/cv.csv",
+      "status": 404
+    },
+    {
+      "path": "models/milestone3/v2/logistic_regression.joblib",
+      "status": 404
+    }
+  ],
+  "browser_interactions": "not tested",
+  "workflow": {
+    "id": 40387560876,
+    "sha": "b9cb8c7f3c5ed127c73f951cc4607e1c2379a901",
+    "url": "https://github.com/SadeenTag/depi_gapAnalyzer/actions/runs/40387560876",
+    "conclusion": "success",
+    "verification_job_id": 121800269309
+  }
+}
