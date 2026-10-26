@@ -3,3 +3,6 @@
 node_modules/
 .env
 __pycache__/
+
+data/processed/final_cleaned_cv.csv
+data/raw/cv.csv
