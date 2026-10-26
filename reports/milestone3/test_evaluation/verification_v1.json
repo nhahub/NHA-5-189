@@ -1,0 +1,13 @@
+{
+  "original_files_checked": 81,
+  "changed_original_files": [
+    "notebooks\\03_model_training_and_comparison.ipynb",
+    "src\\milestone3.py"
+  ],
+  "historical_inputs_splits_models_reports_unchanged": true,
+  "all_saved_evaluation_hashes_verified": true,
+  "saved_metrics_recomputed_from_prediction_table": true,
+  "clean_kernel_notebook_with_fitting_disabled": true,
+  "focused_tests_passed": 7,
+  "active_evaluation": "reports/milestone3/test_evaluation/v2"
+}

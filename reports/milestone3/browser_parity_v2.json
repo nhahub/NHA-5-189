@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "export_version": "v1",
+  "assets_bytes": 112299,
+  "assets_sha256": "d406bd9d8dadc8ebed53a767b93ee0fce6bf991b960a49b87e1798a40a9fbc6a",
+  "python": "3.12.10",
+  "node": "v24.11.0",
+  "reference_cases": 23,
+  "valid_text_pairs": 21,
+  "rejected_empty_pairs": 2,
+  "validation_pairs": 10,
+  "boundary_cases": 3,
+  "absolute_tolerance": 1e-8,
+  "relative_tolerance": 1e-7,
+  "maximum_absolute_differences": {
+    "vectors": 0,
+    "features": 1.1102230246251565e-16,
+    "scaled": 1.7763568394002505e-15,
+    "decision": 7.105427357601002e-15,
+    "score": 3.885780586188048e-16
+  },
+  "exact_classification_agreement": "24/24",
+  "exact_skill_set_agreement": "21/21",
+  "exact_feedback_suggestions": true,
+  "no_training_or_tuning": true,
+  "real_reference_documents_saved": false,
+  "implementation_hashes": {
+    "frontend/src/inference/milestone3.mjs": "1983f7c600ea1fe165b4151079088aa221a91431fec3b88e9ff4120cb76365b3",
+    "tests/verify_browser_parity.mjs": "150035ba434b57e08b7e382a5c65c70bb6fbf7dc7d511e16a0b981b9de3cc7e9"
+  }
+}

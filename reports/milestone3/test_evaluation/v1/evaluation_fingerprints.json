@@ -1,0 +1,49 @@
+{
+  "current_evaluation_inputs_models_sources": {
+    "data/labeled/suitability_review_master_v1.csv": "77e389a91f3bd84133444dd14a92dd6e91b7bfd5430868bc3f9f1d657d48fd41",
+    "data/labeled/suitability_development_labels_v1.csv": "3d3d29cd63f75a5411a327cd652e9209777d014511ee60827a946bc869f2aade",
+    "data/raw/cv.csv": "67c81a4761516113dbebcd8c6acc1b692c4b20e54341187ff864d2d637099640",
+    "data/raw/job.csv": "e60af25061d638f03b5414ba0f6b52fc71da6ecc947e2e781124b920ebbb1d37",
+    "src/milestone3.py": "25dcf0af320d4b734631d0bce994a233365adceb4d0a30d64858118435ccb6ca",
+    "src/skill_extraction.py": "a7e483b2ad6c63f0cb14fe25385aaf2e208d30492f779fa2b115037ef9cce559",
+    "src/milestone3_evaluation.py": "fcb423b618e872e8ea2967d611e566bb17d688be3449505ace3abe07a772a7db",
+    "models/milestone3/v2/dictionary.json": "d2b091814eb9168ed8ed71b343d4b1e19066707699b7e4e123cd88329e274b1d",
+    "models/milestone3/v2/feature_definitions.json": "b0c86ea250d0409865ac6c2629eadb23b5adfc2898f7006628fbf06211a2e03c",
+    "models/milestone3/v2/logistic_regression.joblib": "8978e89a596199aaedf88955024f6aaccc4c2d88e3b02c381a2bb4d909e3b5bc",
+    "models/milestone3/v2/random_forest.joblib": "bac0e488ea348c700bfa707d75a60c979119b2e0730a00a5603ad7e9cac49f35",
+    "models/milestone3/v2/selection.json": "a338178addbedaa7e2d6aefdc50730cf75e6f340046b35543d0de8ec852f2762",
+    "models/milestone3/v2/tfidf_vectorizer.joblib": "85d6ccbbfd44b6dea64f739fd2ee6d1d58f8b14fdcc1f11b0d0edf45ff5521ed",
+    "data/processed/milestone3/v2/input_fingerprints.json": "7e404f11be0825760d809b0dd7b8a9af7a7d6d7efc577c78460770d9a31ef625",
+    "data/processed/milestone3/v2/split_manifest.csv": "640b3594c01b8bcba7ed3db08ef3ae4c1637fadbfe69ed5e01ddeb99684dc59a",
+    "data/processed/milestone3/v2/train_features.csv": "621176da5c19ab36860a9a0d8a854980e2e4530cc77575a7cf235784218545f2",
+    "data/processed/milestone3/v2/validation_features.csv": "444785fb3a314a3e0543c7b1d818901dc512d75d5abf531a2b08683303c1a453",
+    "reports/milestone3/v2/completed.json": "0553fa4eceda3fc00b3733bd7f3c09be5c0c30d5ac2eaae667f5c071703f2a30",
+    "reports/milestone3/v2/search.json": "cb961a4288622cd2fbfd307fad644ea02b0b0e6a351caf4cda251b1e473d7505",
+    "reports/milestone3/v2/split_audit.json": "44e7b34cf56183d6b517893e910324dac09e3da43f3fb29fc42eae0ec0885f2c",
+    "reports/milestone3/v2/training_validation_report.md": "e2f8e3049bd1f0831b9ecb779f70afbe7aa668c8a400b2f039bb22b658e454d2",
+    "reports/milestone3/v2/validation_comparison.csv": "e124fe003dc4bcbdafab913d3149c2dc888c9feded640256bc3b40d69341f498",
+    "reports/milestone3/v2/validation_predictions.csv": "62c63e78a83d9158656f375d13263cbc9c77dc97bbcd6a1353036b6842fd4b47",
+    "reports/milestone3/v2/versions.json": "c1f2a90ae00515f0bf14a62134fb712dc46d343fd0b05e7a1728bd7d25dccd55"
+  },
+  "historical_training": {
+    "data\\labeled\\suitability_review_master_v1.csv": "77e389a91f3bd84133444dd14a92dd6e91b7bfd5430868bc3f9f1d657d48fd41",
+    "data\\labeled\\suitability_development_labels_v1.csv": "3d3d29cd63f75a5411a327cd652e9209777d014511ee60827a946bc869f2aade",
+    "data/raw/cv.csv": "67c81a4761516113dbebcd8c6acc1b692c4b20e54341187ff864d2d637099640",
+    "data/raw/job.csv": "e60af25061d638f03b5414ba0f6b52fc71da6ecc947e2e781124b920ebbb1d37",
+    "implementation": "1de9a4dda4d5ca785f2947a71fbf1fd247dd89c96fdfa06bfbd7bdce64fa6ee6"
+  },
+  "model_reference": "models/milestone3/v2/logistic_regression.joblib",
+  "threshold": 0.5,
+  "positive_class_index": 1,
+  "versions": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "joblib": "1.6.0",
+    "spacy": "3.8.16",
+    "nbclient": "0.11.0",
+    "nbformat": "5.11.1"
+  }
+}

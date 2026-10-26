@@ -1,0 +1,126 @@
+[
+  {
+    "domain": "BUSINESS-DEVELOPMENT",
+    "pairs": 3,
+    "suitable": 1,
+    "unsuitable": 2,
+    "metrics": {
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "confusion_matrix": [
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "unsuitable_precision": 1.0,
+      "unsuitable_recall": 1.0,
+      "unsuitable_f1": 1.0,
+      "unsuitable_support": 2,
+      "suitable_precision": 1.0,
+      "suitable_recall": 1.0,
+      "suitable_f1": 1.0,
+      "suitable_support": 1
+    },
+    "note": "Descriptive only; absent classes: []. Class metrics with zero support are undefined, represented by zero under zero_division=0."
+  },
+  {
+    "domain": "FINANCE",
+    "pairs": 0,
+    "suitable": 0,
+    "unsuitable": 0,
+    "metrics": null,
+    "note": "Unsupported: no test examples"
+  },
+  {
+    "domain": "HR",
+    "pairs": 2,
+    "suitable": 1,
+    "unsuitable": 1,
+    "metrics": {
+      "macro_f1": 0.3333333333333333,
+      "accuracy": 0.5,
+      "confusion_matrix": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "unsuitable_precision": 0.0,
+      "unsuitable_recall": 0.0,
+      "unsuitable_f1": 0.0,
+      "unsuitable_support": 1,
+      "suitable_precision": 0.5,
+      "suitable_recall": 1.0,
+      "suitable_f1": 0.6666666666666666,
+      "suitable_support": 1
+    },
+    "note": "Descriptive only; absent classes: []. Class metrics with zero support are undefined, represented by zero under zero_division=0."
+  },
+  {
+    "domain": "INFORMATION-TECHNOLOGY",
+    "pairs": 3,
+    "suitable": 0,
+    "unsuitable": 3,
+    "metrics": {
+      "macro_f1": 0.4,
+      "accuracy": 0.6666666666666666,
+      "confusion_matrix": [
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "unsuitable_precision": 1.0,
+      "unsuitable_recall": 0.6666666666666666,
+      "unsuitable_f1": 0.8,
+      "unsuitable_support": 3,
+      "suitable_precision": null,
+      "suitable_recall": null,
+      "suitable_f1": null,
+      "suitable_support": 0
+    },
+    "note": "Descriptive only; absent classes: ['suitable']. Their class metrics are null (unsupported). Macro F1 uses the fixed two-class convention with zero_division=0."
+  },
+  {
+    "domain": "SALES",
+    "pairs": 2,
+    "suitable": 0,
+    "unsuitable": 2,
+    "metrics": {
+      "macro_f1": 0.5,
+      "accuracy": 1.0,
+      "confusion_matrix": [
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "unsuitable_precision": 1.0,
+      "unsuitable_recall": 1.0,
+      "unsuitable_f1": 1.0,
+      "unsuitable_support": 2,
+      "suitable_precision": null,
+      "suitable_recall": null,
+      "suitable_f1": null,
+      "suitable_support": 0
+    },
+    "note": "Descriptive only; absent classes: ['suitable']. Their class metrics are null (unsupported). Macro F1 uses the fixed two-class convention with zero_division=0."
+  }
+]

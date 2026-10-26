@@ -1,0 +1,48 @@
+[
+  {
+    "pair_id": "cand_01689:3899539354",
+    "error_type": "false_positive",
+    "job_title": "Senior Vice President Human Resources",
+    "domain": "HR",
+    "supplied_label": 0,
+    "prediction": 1,
+    "features": {
+      "tfidf_cosine": 0.05869178985465682,
+      "job_skill_coverage": 0.0,
+      "missing_job_skill_count": 3.0,
+      "no_job_skills": 0.0
+    },
+    "matched_mentioned_skills": [],
+    "mentioned_job_skills_not_found": [
+      "focus",
+      "organizational",
+      "strategic planning"
+    ],
+    "hypothesis": "The classifier uses lexical similarity and mentioned-skill evidence. This may not capture the role responsibilities, experience or context described in these documents. Missing dictionary matches and unverified annotation decisions are other possible explanations; these are hypotheses, not proven causes.",
+    "document_observation_and_hypothesis": "The resume describes a student research assistant with data-analysis skills and 1–3 years of experience. The job describes an HR executive with 15+ years of HR experience and employment/labor-law knowledge. The four matching features do not explicitly compare seniority or required experience, which may help explain this false positive."
+  },
+  {
+    "pair_id": "cand_02542:3901981623",
+    "error_type": "false_positive",
+    "job_title": "Information Technology Administrator",
+    "domain": "INFORMATION-TECHNOLOGY",
+    "supplied_label": 0,
+    "prediction": 1,
+    "features": {
+      "tfidf_cosine": 0.08643488567050456,
+      "job_skill_coverage": 0.0,
+      "missing_job_skill_count": 5.0,
+      "no_job_skills": 0.0
+    },
+    "matched_mentioned_skills": [],
+    "mentioned_job_skills_not_found": [
+      "active directory",
+      "functional",
+      "information technology",
+      "network infrastructure",
+      "vpn"
+    ],
+    "hypothesis": "The classifier uses lexical similarity and mentioned-skill evidence. This may not capture the role responsibilities, experience or context described in these documents. Missing dictionary matches and unverified annotation decisions are other possible explanations; these are hypotheses, not proven causes.",
+    "document_observation_and_hypothesis": "The resume describes accounting and project-administration work; the job describes IT infrastructure, POS systems, Active Directory, firewall and VPN applications. The word controller appears in an accounting context in the resume and in domain controller in the job. Shared words may inflate lexical similarity without establishing the same responsibilities; this is a possible explanation, not a proven cause."
+  }
+]

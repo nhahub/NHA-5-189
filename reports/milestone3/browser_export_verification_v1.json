@@ -1,0 +1,14 @@
+{
+  "original_files_checked": 112,
+  "only_changed_original_file": [
+    "notebooks\\03_model_training_and_comparison.ipynb"
+  ],
+  "historical_datasets_models_preprocessing_splits_reports_unchanged": true,
+  "public_assets_bytes": 112299,
+  "export_folder_bytes": 115585,
+  "export_hash_verified": true,
+  "source_fingerprints_verified": true,
+  "no_training_tuning_or_test_recomputation": true,
+  "focused_python_tests_passed": 7,
+  "parity_report": "reports/milestone3/browser_parity_v2.json"
+}

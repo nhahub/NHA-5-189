@@ -1,0 +1,9 @@
+{
+  "model": "logistic_regression",
+  "settings": {
+    "C": 10.0
+  },
+  "threshold": 0.5,
+  "rule": "score >= threshold predicts suitable",
+  "refit_on_train_plus_validation": false
+}

@@ -1,32 +1,5 @@
-# Python virtual environments
-.venv/
-venv/
-env/
-ENV/
-
-# Python-generated files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Test, type-checker, and notebook caches
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.ipynb_checkpoints/
-
-# Packaging output
-build/
-dist/
-*.egg-info/
-
-# Local environment variables
+﻿.npm-cache/
+.notebook_runtime/
+node_modules/
 .env
-.env.*
-!.env.example
-
-# Editor and operating-system files
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+__pycache__/

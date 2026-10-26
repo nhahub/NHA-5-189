@@ -1,0 +1,7 @@
+{
+  "data\\labeled\\suitability_review_master_v1.csv": "77e389a91f3bd84133444dd14a92dd6e91b7bfd5430868bc3f9f1d657d48fd41",
+  "data\\labeled\\suitability_development_labels_v1.csv": "3d3d29cd63f75a5411a327cd652e9209777d014511ee60827a946bc869f2aade",
+  "data/raw/cv.csv": "67c81a4761516113dbebcd8c6acc1b692c4b20e54341187ff864d2d637099640",
+  "data/raw/job.csv": "e60af25061d638f03b5414ba0f6b52fc71da6ecc947e2e781124b920ebbb1d37",
+  "implementation": "0c5b88a1a6317626c4d3b37e9234745d8cc453f43723846b11cb48d8eba0ff18"
+}

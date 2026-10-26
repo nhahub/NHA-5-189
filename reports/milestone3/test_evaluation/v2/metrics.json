@@ -1,0 +1,94 @@
+[
+  {
+    "name": "logistic_regression",
+    "macro_f1": 0.7619047619047619,
+    "accuracy": 0.8,
+    "confusion_matrix": [
+      [
+        6,
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "unsuitable_precision": 1.0,
+    "unsuitable_recall": 0.75,
+    "unsuitable_f1": 0.8571428571428571,
+    "unsuitable_support": 8,
+    "suitable_precision": 0.5,
+    "suitable_recall": 1.0,
+    "suitable_f1": 0.6666666666666666,
+    "suitable_support": 2
+  },
+  {
+    "name": "majority",
+    "macro_f1": 0.4444444444444444,
+    "accuracy": 0.8,
+    "confusion_matrix": [
+      [
+        8,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ],
+    "unsuitable_precision": 0.8,
+    "unsuitable_recall": 1.0,
+    "unsuitable_f1": 0.8888888888888888,
+    "unsuitable_support": 8,
+    "suitable_precision": 0.0,
+    "suitable_recall": 0.0,
+    "suitable_f1": 0.0,
+    "suitable_support": 2
+  },
+  {
+    "name": "tfidf_threshold",
+    "macro_f1": 0.8666666666666667,
+    "accuracy": 0.9,
+    "confusion_matrix": [
+      [
+        7,
+        1
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "unsuitable_precision": 1.0,
+    "unsuitable_recall": 0.875,
+    "unsuitable_f1": 0.9333333333333333,
+    "unsuitable_support": 8,
+    "suitable_precision": 0.6666666666666666,
+    "suitable_recall": 1.0,
+    "suitable_f1": 0.8,
+    "suitable_support": 2
+  },
+  {
+    "name": "skill_threshold",
+    "macro_f1": 0.375,
+    "accuracy": 0.6,
+    "confusion_matrix": [
+      [
+        6,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ],
+    "unsuitable_precision": 0.75,
+    "unsuitable_recall": 0.75,
+    "unsuitable_f1": 0.75,
+    "unsuitable_support": 8,
+    "suitable_precision": 0.0,
+    "suitable_recall": 0.0,
+    "suitable_f1": 0.0,
+    "suitable_support": 2
+  }
+]

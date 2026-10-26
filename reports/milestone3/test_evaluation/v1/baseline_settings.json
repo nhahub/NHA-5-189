@@ -1,0 +1,16 @@
+{
+  "majority": {
+    "settings": {
+      "training_majority": 0
+    },
+    "threshold": 0.5
+  },
+  "tfidf_threshold": {
+    "settings": {},
+    "threshold": 0.1
+  },
+  "skill_threshold": {
+    "settings": {},
+    "threshold": 0.3
+  }
+}

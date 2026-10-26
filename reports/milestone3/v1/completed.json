@@ -1,0 +1,36 @@
+{
+  "fingerprints": {
+    "data\\labeled\\suitability_review_master_v1.csv": "77e389a91f3bd84133444dd14a92dd6e91b7bfd5430868bc3f9f1d657d48fd41",
+    "data\\labeled\\suitability_development_labels_v1.csv": "3d3d29cd63f75a5411a327cd652e9209777d014511ee60827a946bc869f2aade",
+    "data/raw/cv.csv": "67c81a4761516113dbebcd8c6acc1b692c4b20e54341187ff864d2d637099640",
+    "data/raw/job.csv": "e60af25061d638f03b5414ba0f6b52fc71da6ecc947e2e781124b920ebbb1d37",
+    "implementation": "0c5b88a1a6317626c4d3b37e9234745d8cc453f43723846b11cb48d8eba0ff18"
+  },
+  "artifacts": {
+    "data\\processed\\milestone3\\v1\\input_fingerprints.json": "e728312508676997270b92d3e79d9e38dbdedd4c102c21d7cbde7386348b5f6a",
+    "data\\processed\\milestone3\\v1\\split_manifest.csv": "640b3594c01b8bcba7ed3db08ef3ae4c1637fadbfe69ed5e01ddeb99684dc59a",
+    "data\\processed\\milestone3\\v1\\train_features.csv": "621176da5c19ab36860a9a0d8a854980e2e4530cc77575a7cf235784218545f2",
+    "data\\processed\\milestone3\\v1\\validation_features.csv": "444785fb3a314a3e0543c7b1d818901dc512d75d5abf531a2b08683303c1a453",
+    "models\\milestone3\\v1\\dictionary.json": "d2b091814eb9168ed8ed71b343d4b1e19066707699b7e4e123cd88329e274b1d",
+    "models\\milestone3\\v1\\feature_definitions.json": "b0c86ea250d0409865ac6c2629eadb23b5adfc2898f7006628fbf06211a2e03c",
+    "models\\milestone3\\v1\\logistic_regression.joblib": "8978e89a596199aaedf88955024f6aaccc4c2d88e3b02c381a2bb4d909e3b5bc",
+    "models\\milestone3\\v1\\random_forest.joblib": "bac0e488ea348c700bfa707d75a60c979119b2e0730a00a5603ad7e9cac49f35",
+    "models\\milestone3\\v1\\selection.json": "a338178addbedaa7e2d6aefdc50730cf75e6f340046b35543d0de8ec852f2762",
+    "models\\milestone3\\v1\\tfidf_vectorizer.joblib": "85d6ccbbfd44b6dea64f739fd2ee6d1d58f8b14fdcc1f11b0d0edf45ff5521ed",
+    "reports\\milestone3\\v1\\search.json": "cb961a4288622cd2fbfd307fad644ea02b0b0e6a351caf4cda251b1e473d7505",
+    "reports\\milestone3\\v1\\split_audit.json": "44e7b34cf56183d6b517893e910324dac09e3da43f3fb29fc42eae0ec0885f2c",
+    "reports\\milestone3\\v1\\training_validation_report.md": "6ef0be32cd2b13d08570aa1a0ca8d9390085f175d2a4691208aa818a50376125",
+    "reports\\milestone3\\v1\\validation_comparison.csv": "e124fe003dc4bcbdafab913d3149c2dc888c9feded640256bc3b40d69341f498",
+    "reports\\milestone3\\v1\\validation_predictions.csv": "62c63e78a83d9158656f375d13263cbc9c77dc97bbcd6a1353036b6842fd4b47",
+    "reports\\milestone3\\v1\\versions.json": "c1f2a90ae00515f0bf14a62134fb712dc46d343fd0b05e7a1728bd7d25dccd55"
+  },
+  "selection": {
+    "model": "logistic_regression",
+    "settings": {
+      "C": 10.0
+    },
+    "threshold": 0.5,
+    "rule": "score >= threshold predicts suitable",
+    "refit_on_train_plus_validation": false
+  }
+}

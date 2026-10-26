@@ -1,0 +1,3 @@
+pair_id,job_title,sampling_domain,training_label,label_source,logistic_regression_score,logistic_regression_prediction,majority_prediction,tfidf_threshold_prediction,skill_threshold_prediction,tfidf_cosine,job_skill_coverage,missing_job_skill_count,no_job_skills
+cand_01689:3899539354,Senior Vice President Human Resources,HR,0,automated_annotation,0.6577538099978889,1,0,0,0,0.05869178985465682,0.0,3,0
+cand_02542:3901981623,Information Technology Administrator,INFORMATION-TECHNOLOGY,0,automated_annotation,0.6735818985176644,1,0,0,0,0.08643488567050456,0.0,5,0

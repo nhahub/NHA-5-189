@@ -1,0 +1,9 @@
+{
+  "preexisting_files_verified_unchanged": 123,
+  "changed_preexisting_files": [],
+  "copied_model_sha256": "d406bd9d8dadc8ebed53a767b93ee0fce6bf991b960a49b87e1798a40a9fbc6a",
+  "production_build_passed": true,
+  "focused_tests_passed": 7,
+  "actual_browser_testing": "Pending: Computer Use could not confidently determine the Windows browser URL; no workaround attempted.",
+  "no_training_tuning_or_deployment": true
+}

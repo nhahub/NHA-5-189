@@ -1,0 +1,24 @@
+{
+  "feature_order": [
+    "tfidf_cosine",
+    "job_skill_coverage",
+    "missing_job_skill_count",
+    "no_job_skills"
+  ],
+  "definitions": {
+    "tfidf_cosine": "Cosine in L2-normalized training-only TF-IDF space",
+    "job_skill_coverage": "Matched unique normalized skills / unique mentioned job skills; zero if empty",
+    "missing_job_skill_count": "Unique mentioned job skills absent from resume",
+    "no_job_skills": "1 for unavailable skill evidence, not a confirmed zero match"
+  },
+  "training_unique_documents": 45,
+  "normalization": "Casefold and whitespace only; punctuation retained",
+  "artifact_status": {
+    "vectorizer": "derived from unique training documents",
+    "dictionary": "derived from supplied training-ID skill lists with fixed aliases/filter",
+    "models_and_scaler": "trained on training pairs only",
+    "thresholds_and_hyperparameters": "selected on validation only",
+    "split": "derived from group structure and labels only",
+    "aliases_and_feature_definitions": "fixed in advance"
+  }
+}

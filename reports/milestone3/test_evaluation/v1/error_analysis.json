@@ -1,0 +1,46 @@
+[
+  {
+    "pair_id": "cand_01689:3899539354",
+    "error_type": "false_positive",
+    "job_title": "Senior Vice President Human Resources",
+    "domain": "HR",
+    "supplied_label": 0,
+    "prediction": 1,
+    "features": {
+      "tfidf_cosine": 0.05869178985465682,
+      "job_skill_coverage": 0.0,
+      "missing_job_skill_count": 3.0,
+      "no_job_skills": 0.0
+    },
+    "matched_mentioned_skills": [],
+    "mentioned_job_skills_not_found": [
+      "focus",
+      "organizational",
+      "strategic planning"
+    ],
+    "hypothesis": "The classifier uses lexical similarity and mentioned-skill evidence. This may not capture the role responsibilities, experience or context described in these documents. Missing dictionary matches and unverified annotation decisions are other possible explanations; these are hypotheses, not proven causes."
+  },
+  {
+    "pair_id": "cand_02542:3901981623",
+    "error_type": "false_positive",
+    "job_title": "Information Technology Administrator",
+    "domain": "INFORMATION-TECHNOLOGY",
+    "supplied_label": 0,
+    "prediction": 1,
+    "features": {
+      "tfidf_cosine": 0.08643488567050456,
+      "job_skill_coverage": 0.0,
+      "missing_job_skill_count": 5.0,
+      "no_job_skills": 0.0
+    },
+    "matched_mentioned_skills": [],
+    "mentioned_job_skills_not_found": [
+      "active directory",
+      "functional",
+      "information technology",
+      "network infrastructure",
+      "vpn"
+    ],
+    "hypothesis": "The classifier uses lexical similarity and mentioned-skill evidence. This may not capture the role responsibilities, experience or context described in these documents. Missing dictionary matches and unverified annotation decisions are other possible explanations; these are hypotheses, not proven causes."
+  }
+]

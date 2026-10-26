@@ -1,0 +1,11 @@
+pair_id,job_title,sampling_domain,training_label,label_source,logistic_regression_score,logistic_regression_prediction,majority_prediction,tfidf_threshold_prediction,skill_threshold_prediction
+cand_04626:3888939786,Business Development Representative,BUSINESS-DEVELOPMENT,1,recorded_first_review,0.5082992833034649,1,0,1,0
+cand_00751:3898162140,Business Development Representative,BUSINESS-DEVELOPMENT,0,recorded_first_review,0.0005979105693974566,0,0,0,0
+cand_01042:3884429683,New Business Development Representative,BUSINESS-DEVELOPMENT,0,automated_annotation,0.3668139175216898,0,0,1,0
+cand_00499:3899526653,Human Resources Intern,HR,1,automated_annotation,0.9019952624311564,1,0,1,0
+cand_01689:3899539354,Senior Vice President Human Resources,HR,0,automated_annotation,0.6577538099978889,1,0,0,0
+cand_01882:3901981623,Information Technology Administrator,INFORMATION-TECHNOLOGY,0,automated_annotation,0.10689112935700736,0,0,0,0
+cand_02274:3901938160,Information Technology Auditor,INFORMATION-TECHNOLOGY,0,automated_annotation,0.0014438972706042965,0,0,0,0
+cand_02542:3901981623,Information Technology Administrator,INFORMATION-TECHNOLOGY,0,automated_annotation,0.6735818985176644,1,0,0,0
+cand_03477:3904096330,Salesforce Vlocity/OmniStudio Developer,SALES,0,automated_annotation,0.041895156090454744,0,0,0,1
+cand_00131:3904096330,Salesforce Vlocity/OmniStudio Developer,SALES,0,automated_annotation,0.23826601880424042,0,0,0,1
