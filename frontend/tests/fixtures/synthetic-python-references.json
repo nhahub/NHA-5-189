@@ -1,0 +1,96 @@
+[
+  {
+    "resume": "I use Python and JS.",
+    "job": "Python, JavaScript, SQL and Node.js.",
+    "expected": {
+      "resume_skills": [
+        "javascript",
+        "python"
+      ],
+      "job_skills": [
+        "javascript",
+        "node.js",
+        "python",
+        "sql"
+      ],
+      "matched_skills": [
+        "javascript",
+        "python"
+      ],
+      "job_skills_not_found": [
+        "node.js",
+        "sql"
+      ],
+      "job_skill_coverage": 0.5,
+      "tfidf_text_similarity": 0.23831166714057095,
+      "model_classification": "Suitable Match",
+      "classifier_score": 0.9998208399806165,
+      "model_features": {
+        "tfidf_cosine": 0.23831166714057095,
+        "job_skill_coverage": 0.5,
+        "missing_job_skill_count": 2.0,
+        "no_job_skills": 0.0
+      }
+    }
+  },
+  {
+    "resume": "C C++ C# Java JavaScript .NET Node.js",
+    "job": "C++, C#, JavaScript and Node.js.",
+    "expected": {
+      "resume_skills": [
+        ".net",
+        "c",
+        "c#",
+        "c++",
+        "java",
+        "javascript",
+        "node.js"
+      ],
+      "job_skills": [
+        "c#",
+        "c++",
+        "javascript",
+        "node.js"
+      ],
+      "matched_skills": [
+        "c#",
+        "c++",
+        "javascript",
+        "node.js"
+      ],
+      "job_skills_not_found": [],
+      "job_skill_coverage": 1.0,
+      "tfidf_text_similarity": 0.7208060301375212,
+      "model_classification": "Suitable Match",
+      "classifier_score": 0.9999999999999929,
+      "model_features": {
+        "tfidf_cosine": 0.7208060301375212,
+        "job_skill_coverage": 1.0,
+        "missing_job_skill_count": 0.0,
+        "no_job_skills": 0.0
+      }
+    }
+  },
+  {
+    "resume": "Python",
+    "job": "zzzzqqqq",
+    "expected": {
+      "resume_skills": [
+        "python"
+      ],
+      "job_skills": [],
+      "matched_skills": [],
+      "job_skills_not_found": [],
+      "job_skill_coverage": null,
+      "tfidf_text_similarity": 0.0,
+      "model_classification": "Unsuitable Match",
+      "classifier_score": 0.42140493461254397,
+      "model_features": {
+        "tfidf_cosine": 0.0,
+        "job_skill_coverage": 0.0,
+        "missing_job_skill_count": 0.0,
+        "no_job_skills": 1.0
+      }
+    }
+  }
+]

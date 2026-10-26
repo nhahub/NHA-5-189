@@ -1,0 +1,2 @@
+Synthetic resume. Python, JavaScript and SQL.
+A sample project uses Git and Node.js.

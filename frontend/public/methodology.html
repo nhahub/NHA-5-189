@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Methodology | Resume Skill Gap Analyzer</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17243b;font:16px/1.75 system-ui,sans-serif}header{background:#0b1730;color:white;padding:24px max(24px,calc((100% - 840px)/2))}main{max-width:840px;margin:32px auto;padding:32px;background:white;border:1px solid #dce4ef;border-radius:14px}h1,h2{line-height:1.3}h1{font-size:32px}h2{font-size:22px;margin-top:32px}a{color:#245cb5}header a{color:#c8d6ec}a:focus-visible{outline:3px solid #397af6;outline-offset:4px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:10px;text-align:left;border-bottom:1px solid #dce4ef}p,li{overflow-wrap:anywhere}@media(max-width:600px){main{margin:16px;padding:22px}th,td{padding:7px}}
+  </style>
+</head>
+<body>
+  <header><a href="./">Back to the analyzer</a></header>
+  <main>
+    <h1>Methodology and limitations</h1>
+    <p>This project compares information in a resume with a job description. The assessment, skill coverage and text similarity are separate outputs. This documentation describes how they are produced and the limits of the evidence behind them.</p>
+    <h2>Assessment approach</h2>
+    <p>The application uses the existing Logistic Regression classifier with StandardScaler, balanced class weights, C=10 and a decision threshold of 0.5. It uses four features: TF-IDF cosine similarity, job-skill coverage, the count of job skills not found in the resume, and an indicator for unavailable job-skill evidence.</p>
+    <p>Training used 29 pairs, validation used 10 pairs and the held-out test used 10 pairs. The saved assignments separate candidate IDs, normalized resume texts, job IDs and normalized job texts across the three sets. TF-IDF and scaling were fitted on training data only. The dictionary was derived from supplied skill lists restricted to training candidate and job IDs, with a fixed filter and explicit technology aliases.</p>
+    <p>Training compared C values 0.1, 1 and 10 and decision thresholds from 0.2 through 0.8 in increments of 0.1. Validation macro F1 selected the settings, with deterministic tie-breaking favoring lower C, then a threshold closer to 0.5, then the lower threshold. C=10 and threshold 0.5 were selected. The held-out test did not change these settings.</p>
+    <h2>Skills and text similarity</h2>
+    <p>Extraction uses a fixed dictionary, punctuation-aware phrase matching and explicit aliases. Text normalization changes case and whitespace while preserving punctuation. Technologies such as C, C++, C#, Java, JavaScript, .NET and Node.js remain distinct where appropriate; JS and JavaScript share an alias.</p>
+    <p>Job-Skill Coverage is the number of unique normalized job skills also identified in the resume divided by the number of unique extracted job skills. Every recognized term is retained in the displayed lists and calculations, including generic terms. Mentioned job skills are not automatically essential requirements.</p>
+    <p>When no job skills are recognized, displayed coverage is Unavailable. Internally, the saved model receives coverage 0, missing count 0 and the no-job-skills indicator 1. This means unavailable skill evidence, not a confirmed mismatch.</p>
+    <p>Text Similarity is cosine similarity between the two texts in the saved, training-fitted TF-IDF space. It measures shared vocabulary rather than experience, seniority or the meaning of every responsibility. Classification is a separate model output and is not an overall match percentage.</p>
+    <h2>Labels and measured results</h2>
+    <p>The development dataset contains 49 labeled pairs: 12 suitable and 37 unsuitable. Its labels comprise 46 automated annotations and three recorded first-review decisions, without independent human verification. Uncertain pairs were excluded. Evaluation therefore measures agreement with these annotations, not independently established hiring suitability.</p>
+    <table>
+      <thead><tr><th scope="col">Measurement</th><th scope="col">Test accuracy</th><th scope="col">Test macro F1</th></tr></thead>
+      <tbody><tr><th scope="row">Logistic Regression</th><td>80%</td><td>0.762</td></tr><tr><th scope="row">Majority-class reference</th><td>80%</td><td>0.444</td></tr><tr><th scope="row">TF-IDF threshold reference</th><td>90%</td><td>0.867</td></tr><tr><th scope="row">Skill-coverage threshold reference</th><td>60%</td><td>0.375</td></tr></tbody>
+    </table>
+    <p>Logistic Regression classified eight of the ten test pairs correctly, with two false positives and no false negatives. The confusion matrix is [[6, 2], [0, 2]], with actual-label rows and predicted-label columns ordered [Unsuitable, Suitable]. Validation macro F1 was 1.000. The TF-IDF reference performed better on test; the previously selected classifier remains unchanged.</p>
+    <h2>Limits of interpretation</h2>
+    <ul>
+      <li>The dataset is small and imbalanced. Only two test examples are suitable, so small changes can substantially change the reported metrics.</li>
+      <li>Finance has no test examples. Sales has no suitable development examples. All five suitable IT development examples share one help-desk job. Uneven domain coverage limits broader conclusions.</li>
+      <li>Dictionary matching may miss unfamiliar terms or contextual evidence and may recognize generic words. Not identifying a skill in a resume does not establish that the person lacks it.</li>
+      <li>The model does not explicitly assess every responsibility, experience requirement or seniority difference. An empty gap list does not establish that all job requirements are met.</li>
+      <li>Suggestions use explicit conditional wording, not another trained model. They do not invent experience, qualifications or achievements.</li>
+      <li>The application does not evaluate grammar, formatting or CV layout. Complex documents can have extraction and reading-order errors. Scanned PDFs require OCR outside this application.</li>
+      <li>JavaScript inference was compared with Python using validation pairs and synthetic cases. These parity checks verify implementation agreement, not independent model quality. Actual browser acceptance and visual checks remain pending.</li>
+    </ul>
+    <h2>Document handling</h2>
+    <p>Resume and job text are held in browser memory. The application has no document-content upload endpoint, analytics or localStorage persistence. TXT, DOCX and selectable-text PDF parsing run locally, with a 10 MiB upload limit. Users can review and edit extracted text. Browser network inspection remains part of the pending acceptance checks.</p>
+    <p>The full saved training, validation, held-out evaluation and browser-parity reports remain in the project documentation under reports/milestone3/. This page summarizes that existing methodology without changing any recorded results.</p>
+  </main>
+</body>
+</html>
