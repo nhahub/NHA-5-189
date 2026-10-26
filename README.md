@@ -1,314 +1,189 @@
-# AI-Based Resume Skill Gap Analyzer
+Resume Skill Gap Analyzer
+DEPI - AI & Data Science Track
 
-**DEPI — AI & Data Science Track**
+A React application that compares a resume with a job description, identifies shared skills and skills not found in the resume, and suggests what to highlight or develop. A trained Logistic Regression classifier provides a separate resume-job assessment.
 
-## Project Overview
+The application runs document parsing and model inference in the browser. Python supports data preparation, training, evaluation, and model export.
+Features
+- Paste a resume or upload TXT, DOCX, or a PDF containing selectable text.
+- Review and edit extracted text before analysis.
+- Enter a job description and view matched and unrecognized job skills.
+- View job-skill coverage and TF-IDF text similarity separately.
+- Receive a Logistic Regression assessment and conditional improvement suggestions.
+- Recognize supported aliases such as JS/JavaScript.
+- Use a responsive navy interface with loading, retry, and parsing-error states.
+Uploads are limited to 10 MiB. Scanned PDFs need OCR or pasted text. The application does not assess resume grammar or visual layout.
+Technology
+Area	Technologies
+Data preparation and EDA	Python, pandas, NumPy, NLTK, Matplotlib, Seaborn
+Skill extraction	spaCy EntityRuler for the baseline; dictionary and alias matching for the frozen inference pipeline
+Classification	Scikit-learn Logistic Regression with StandardScaler
+Text matching	Training-fitted TF-IDF and cosine similarity
+Frontend	React, JavaScript, Vite, CSS
+Browser document parsing	PDF.js and Mammoth; local TXT reading
+Website hosting target	GitHub Pages
 
-We are building an NLP tool that compares a candidate's resume with a target job description, identifies matched and missing skills, and reports skill coverage and text similarity. The planned final application will let users upload a resume, paste a job description, and view the results through a web interface.
 
-The current implementation runs in Jupyter notebooks and reusable Python modules. Data preprocessing and EDA are documented, and the skill-extraction and TF-IDF matching baseline has been implemented and evaluated. The web application, contextual embeddings, cloud deployment, and monitoring remain planned work.
-
-This README documents the implemented workflow, project structure, evaluation results, known limitations, and future improvements. It also explains how to run the existing notebooks and validation script.
-
-## Work Completed
-
-### Data Collection, Preprocessing, and Exploration
-
-We loaded the full [Job-Resume Matching Dataset](https://huggingface.co/datasets/nonameee12233/job-resume-matching) from the local CSV files:
-
-| Dataset | Local file | Records | Raw columns |
-|---|---|---:|---:|
-| Resumes | `data/raw/cv.csv` | 9,544 | 11 |
-| Job descriptions | `data/raw/job.csv` | 1,167 | 10 |
-| Candidate–job matches | `data/raw/matches.csv` | 122,560 | 13 |
-
-We inspected schemas, missing values, duplicates, text examples, and match references. The preprocessing pipeline extracts resume sections, lowercases text, removes URLs and unwanted characters, normalizes whitespace, tokenizes, removes English stopwords, and applies WordNet lemmatization. It saves the full processed resume and job datasets for the next notebook.
-
-The EDA examines processed resume lengths, the top ten resume and required-job skills, job-category balance, the top five required skills per domain, and supplied match-score statistics.
-
-**Key findings:**
-
-- No missing values or exact duplicate rows were found in the three raw datasets.
-- Processed resumes have a median length of 137 words and a mean of 145.58 words.
-- Python and machine learning lead the supplied resume skill labels; adaptability leads the supplied required-job labels.
-- The five job categories are nearly balanced, with 220–240 postings per category.
-- Match records cover 9,532 candidates and 1,164 jobs, with no unknown candidate or job references. Twelve candidates and three jobs have no match records.
-
-**Deliverables:** [Notebook 01](notebooks/01_data_preprocessing_and_eda.ipynb), [preprocessing module](src/preprocessing.py), [processed datasets](data/processed/), and the [complete EDA report](reports/Milestone_1_EDA_Report.md). The report includes the preprocessing documentation, original charts, findings, and limitations.
-
-### Skill Extraction, Similarity, and Gap Analysis
-
-We built a dictionary from the supplied resume and job skill lists and used spaCy's `EntityRuler` to recognize matching skill phrases. The initial dictionary contains 8,078 unique labels. Filtering 13 generic terms reduces it to 8,065 labels for the optimized extractor.
-
-Implemented functionality includes:
-
-- Extracting skills from cleaned resume and job text.
-- Identifying matched skills by set intersection and missing skills by subtracting resume skills from job requirements.
-- Calculating skill-match percentage as matched skills divided by extracted job skills, with zero returned when no job skills are extracted.
-- Representing processed text with TF-IDF and calculating cosine similarity.
-- Returning the resume position, job title, matched skills, missing skills, skill-match percentage, and text-similarity percentage through `analyze_match()`.
-- Comparing baseline and filtered-dictionary extraction results against the supplied resume skill labels.
-
-The notebook pipeline fits TF-IDF to each selected resume/job pair and reports skill coverage and text similarity separately. These percentages are descriptive matching scores, not probabilities of hiring success.
-
-**Deliverables:** [Notebook 02](notebooks/02_skill_extraction_and_similarity.ipynb), [skill extraction](src/skill_extraction.py), [similarity functions](src/similarity.py), [analysis pipeline](src/pipeline.py), [evaluation functions](src/evaluation.py), and the [model evaluation report](reports/model_evaluation/MODEL_EVALUATION_REPORT.md).
-
-## Evaluation Results
-
-### Skill Extraction Across All Resumes
-
-The saved Notebook 02 outputs report the following averages of per-resume precision, recall, and F1 across all 9,544 resumes:
-
-| Metric | Baseline dictionary | Filtered dictionary |
-|---|---:|---:|
-| Precision | 0.56 | 0.57 |
-| Recall | 0.97 | 0.96 |
-| F1-score | 0.70 | 0.70 |
-
-Filtering generic terms slightly improves precision while reducing recall; F1 remains unchanged at the displayed precision. High recall means many reference skills are found, but lower precision indicates false positives relative to the supplied labels.
-
-The dictionary is built from the same loaded datasets used for evaluation. These are descriptive in-dataset results, not held-out generalization estimates, and the supplied labels have not been independently audited.
-
-### Ranking Validation on a Candidate Subset
-
-The separate [ranking validation script](src/ranking_validation.py) uses a shared TF-IDF vector space and a fixed weighted score of **70% text similarity + 30% supplied skill overlap**. This is a separate baseline from the notebook's pairwise analysis, and it uses supplied skill lists rather than the extractor's predicted skills. The weights are illustrative, not experimentally optimized.
-
-| Metric | Recorded result |
-|---|---:|
-| Valid candidate–job pairs | 348 |
-| Candidates evaluated | 30 |
-| Mean Spearman correlation | 0.1809 |
-| Mean NDCG@5 | 0.9696 |
-| Top-1 agreement | 30% (9 of 30 candidates) |
-
-These values were checked against the saved [per-candidate metrics](reports/ranking_validation/ranking_metrics_by_candidate.csv). [Pair predictions](reports/ranking_validation/ranking_pair_predictions.csv) are also available. The ranking script defaults to the small candidate file, unlike the full-data preprocessing and extraction notebooks.
-
-The reference match scores are precomputed proxies rather than human relevance judgments. Weak rank correlation and 30% top-1 agreement indicate substantial disagreement despite the high NDCG@5. This validation does not establish full-dataset or real-world matching accuracy.
-
-## Challenges and Limitations
-
-- **Parsing:** CSV-based analysis does not measure PDF/DOCX parsing accuracy. Complex layouts, nonstandard section headings, and joined words need targeted validation.
-- **Skill recognition:** Generic terms cause false positives; exact dictionary matching does not reliably handle unfamiliar skills or equivalent terminology. Punctuation-sensitive names also need review.
-- **Evaluation:** Held-out extraction evaluation, broader ranking validation, and independent label review remain necessary.
-- **Semantic matching:** TF-IDF measures lexical overlap. Transformer-based matching and comparison with the current baseline are not implemented yet.
-- **Application delivery:** There is no functioning API, frontend, cloud deployment, experiment tracking, or monitoring in the current repository.
-
-## Future Work
-
-- Implement sentence-transformer embeddings and compare their results with the TF-IDF baseline in Notebook 03.
-- Expand validation with a suitable held-out split, domain-level results, and independently reviewed examples.
-- Implement the FastAPI backend and connect document parsing, preprocessing, skill extraction, and matching.
-- Build the resume-upload and job-description interface, displaying matched skills, missing skills, and scores.
-- Complete Docker and cloud deployment, then add experiment tracking and monitoring.
-- Test the integrated workflow and prepare screenshots, the final report, presentation, and demo.
-
-## Project Structure
-
-```text
-depi_gapAnalyzer/
-├── README.md
-├── requirements.txt
-├── Dockerfile                         # Deployment placeholder
-├── notebooks/
-│   ├── 01_data_preprocessing_and_eda.ipynb
-│   ├── 02_skill_extraction_and_similarity.ipynb
-│   └── 03_embeddings_and_model_comparison.ipynb  # Placeholder
-├── src/
-│   ├── preprocessing.py
-│   ├── skill_extraction.py
-│   ├── similarity.py
-│   ├── pipeline.py
-│   ├── evaluation.py
-│   ├── ranking_validation.py
-│   └── embeddings.py                  # Placeholder
-├── api/
-│   └── main.py                        # Placeholder
-├── data/
-│   ├── raw/                           # Full source CSVs
-│   ├── processed/                     # Full cleaned CV/job exports
-│   └── sample/                        # Small reference datasets
-└── reports/
-    ├── Milestone_1_EDA_Report.md
-    ├── eda_figures/                    # Images used by the EDA report
-    ├── model_evaluation/
-    │   └── MODEL_EVALUATION_REPORT.md
-    └── ranking_validation/
-        ├── ranking_metrics_by_candidate.csv
-        └── ranking_pair_predictions.csv
-```
-
-## Running the Existing Work
-
-The implemented workflow uses Python, pandas, NLTK, spaCy, scikit-learn, Matplotlib, Seaborn, and JupyterLab. PDF and DOCX helpers use PyPDF2 and python-docx. The rule-based spaCy pipeline uses `spacy.blank("en")`, so it does not require downloading a pretrained spaCy model.
-
-### Download the Full Datasets
-
-The full raw and processed CV files are stored with Git LFS. Install Git LFS on
-your machine, then run these commands from the cloned repository before opening
-the notebooks:
-
-```bash
+Logistic Regression is the only active trained classifier. Majority-class, TF-IDF-threshold, and skill-coverage-threshold rules provide evaluation baselines.
+Run the website locally
+Install Git, Git LFS, and a Node.js version compatible with the committed frontend dependencies. The recorded frontend build used Node 24.11.0 and npm 11.6.1.
+git clone https://github.com/nhahub/NHA-5-189.git
+cd NHA-5-189
 git lfs install
 git lfs pull
-```
+cd frontend
+npm ci
+npm run dev
+Open the exact local URL printed by Vite. In PowerShell, use npm.cmd instead of npm if execution policy blocks npm.ps1.
 
-This downloads the actual CSV contents in place of Git LFS pointer files.
+To check the frontend and preview its production build:
+npm test
+npm run build
+npm run preview
+The application uses the exported JSON model in frontend/public/models/milestone3/v1/assets.json. Running the website does not require Python, the raw training CSVs, or a Python API.
 
-### Python Environment Setup
-
-Use Python 3.11 or newer. The virtual environment is stored in `.venv`; it is
-local to your computer and intentionally excluded from Git.
-
-#### Linux and macOS
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-#### Windows PowerShell
-
-```powershell
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-#### Windows Command Prompt
-
-```bat
-py -m venv .venv
-.venv\Scripts\activate.bat
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-After activation, open either active notebook from the project root:
-
-```bash
-jupyter lab notebooks/01_data_preprocessing_and_eda.ipynb
-```
-
-```bash
-jupyter lab notebooks/02_skill_extraction_and_similarity.ipynb
-```
-
-Notebook kernels can run from the project root or `notebooks/`. Both notebooks
-resolve their data paths from the project root.
-
-Notebook 01 still contains the original NLTK resource downloads and CSV writes.
-Running it can download resources and overwrite the two processed CSVs. Run
-Notebook 01 before Notebook 02. Notebook 02 rejects old sample exports when their
-candidate or job IDs do not cover the raw datasets, and restores skill lists
-without requiring Notebook 01's in-memory variables. Install packages
-with `requirements.txt` before execution; `%pip install` lines were removed from
-the notebooks. PDF and DOCX support uses the original `PyPDF2` and `python-docx`.
-
-To leave the environment on any operating system, run `deactivate`.
-
-If your editor asks you to choose a Python interpreter or notebook kernel,
-select the one inside `.venv`.
-
-### Reproduce the Recorded Ranking Validation
-
-From the project root with the environment activated:
-
-```bash
-python -m src.ranking_validation
-```
-
-By default this reads `data/sample/small_cv.csv`, `data/raw/job.csv`, and `data/raw/matches.csv`, then replaces the ranking CSVs under `reports/ranking_validation/`. Use the script's `--cv`, `--jobs`, `--matches`, and `--output` options to change the inputs or output location. Changing the candidate input changes the evaluation scope; the recorded 30-candidate results above should not be assumed to apply to a different run.
-
-## Implementation and Data Notes
-
-- Notebook 01 regenerates full processed data; Notebook 02 checks raw ID coverage before using those exports and restores serialized skill lists.
-- Reusable functions live in `src/`. Importing these modules does not load datasets, download NLTK resources, or run evaluation.
-- The active notebooks use full datasets; previews and example pairs do not restrict aggregate analysis. The separate ranking-validation script uses the candidate subset described above.
-- Keep `reports/eda_figures/` alongside the EDA Markdown file so its images render correctly.
-- `api/main.py` and `src/embeddings.py` contain only placeholder docstrings; the Dockerfile contains only comments and cannot build an application image yet.
-- The original notebook and helper scripts are preserved in Git commit `66c9d4776e46660307f933c9168cc98be355c670`. For example: `git show 66c9d4776e46660307f933c9168cc98be355c670:src/resume_skill_gap.ipynb`.
-
-## Historical Helper Scripts
+The repository is nhahub/NHA-5-189. This README does not assume a verified public deployment URL; confirm the current address and deployment status in the repository's Pages settings and Actions runs.
+What the results mean
+Result	Meaning
+Resume-Job Assessment	Suitable Match or Unsuitable Match under the project's development-label rubric
+Job-Skill Coverage	Unique matched skills divided by unique recognized job skills, displayed as a percentage
+Text Similarity	Cosine similarity between the resume and job TF-IDF vectors
+Skills to Highlight or Develop	Skills mentioned in the job description that the extractor did not find in the resume
+Recommended Improvements	Conditional suggestions to add truthful evidence or practice a skill
 
 
-These are reference copies with their original paths, not current execution instructions.
+A skill not found in the resume may still be one the candidate has. Recognized job skills are mentioned skills, not automatically essential requirements. When no job skills are recognized, displayed coverage is Unavailable.
 
-<details>
-<summary>check_data.py</summary>
+Classification, coverage, and similarity measure different things. A Suitable Match can still have skill gaps. None of these results represents the probability of getting hired.
+Data and annotation
+Source: Job-Resume Matching Dataset on Hugging Face.
+Dataset	Local path	Records
+Resumes	data/raw/cv.csv	9,544
+Job descriptions	data/raw/job.csv	1,167
+Supplied candidate-job matches	data/raw/matches.csv	122,560
 
-```python
-import pandas as pd
 
-cv = pd.read_csv("data/cv.csv")
-jobs = pd.read_csv("data/job.csv")
-matches = pd.read_csv("data/matches.csv")
+Initial checks found no missing values, duplicate identifiers/pairs, or unknown references in the inspected columns. The source label_strength values describe positive-strength categories; weak-positive or unrecorded pairs are not automatically unsuitable.
 
-print("CV shape:", cv.shape)
-print("Jobs shape:", jobs.shape)
-print("Matches shape:", matches.shape)
+Milestone 3 uses a separate pair-level development dataset:
+- 150 master pairs across five domains.
+- 49 binary-labeled pairs: 12 suitable and 37 unsuitable.
+- 46 automated annotations and 3 recorded first-review decisions.
+- 101 uncertain pairs excluded from model development.
+- Independent human verification was not performed.
+The master preserves annotation explanations, assignments, and provenance. Assigned reviewer names do not establish that a human review was completed.
 
-print("\nCV columns:")
-print(cv.columns.tolist())
+Large files tracked with Git LFS require git lfs pull. If a CSV contains only a short pointer rather than dataset rows, download its LFS content before running Python workflows. Retain source attribution and review the source dataset's terms before redistributing data.
+Machine learning workflow
+Each example is a resume-job pair. The classifier receives four numerical features:
+Feature	Definition
+tfidf_cosine	Cosine similarity in the saved TF-IDF space
+job_skill_coverage	Matched unique skills divided by recognized unique job skills
+missing_job_skill_count	Number of recognized job skills absent from the resume
+no_job_skills	1 when the extractor recognizes no job skills; otherwise 0
 
-print("\nJob columns:")
-print(jobs.columns.tolist())
 
-print("\nMatches columns:")
-print(matches.columns.tolist())
-```
+With no recognized job skills, internal coverage and missing count are zero and the indicator is one. The interface displays coverage as unavailable rather than treating this as confirmed skill mismatch.
 
-</details>
+TF-IDF, the dictionary derived from supplied skill lists, scaling, and classifier fitting use training records only. Explicit aliases and technology terms are fixed inputs. Identifiers, annotation rationales, source scores, label sources, and domains are not classifier features.
+Split	Pairs	Suitable	Unsuitable
+Training	29	7	22
+Validation	10	3	7
+Held-out test	10	2	8
 
-<details>
-<summary>inspect_text.py</summary>
 
-```python
-import pandas as pd
+The saved split uses seed 42 and connected groups to prevent shared candidate IDs, job IDs, or identical case/whitespace-normalized documents across partitions. This check does not establish that all near-duplicate documents are absent.
 
-cv = pd.read_csv("data/small_cv.csv")
-jobs = pd.read_csv("data/small_jobs.csv")
+The frozen pipeline is StandardScaler followed by balanced Logistic Regression, with C=10, max_iter=2000, and classification threshold 0.5. Settings and thresholds were selected using validation data. Test results did not change them.
 
-print("----- RESUME -----")
-print(cv.loc[0, "resume_text"])
+The saved model is models/milestone3/v2/logistic_regression.joblib. Its browser export contains coefficients, intercept, scaling statistics, TF-IDF vocabulary/IDF values, skill aliases, and normalization behavior.
+Evaluation
+Suitability classification
+The selected Logistic Regression achieved validation macro F1 1.000 on ten validation pairs. Its held-out performance was lower:
+Classifier or reference baseline	Test accuracy	Test macro F1
+Logistic Regression	80%	0.762
+Majority class	80%	0.444
+TF-IDF threshold	90%	0.867
+Skill-coverage threshold	60%	0.375
 
-print("\n----- JOB DESCRIPTION -----")
-print(jobs.loc[0, "job_description"])
-```
 
-</details>
+The TF-IDF baseline performed better on this test set. The previously selected Logistic Regression remains frozen; the test set was not used to select a replacement or tune settings.
+Logistic Regression class	Precision	Recall	F1	Support
+Unsuitable	1.000	0.750	0.857	8
+Suitable	0.500	1.000	0.667	2
 
-<details>
-<summary>make_small_dataset.py</summary>
 
-```python
-import pandas as pd
+Confusion matrix, with actual-label rows and predicted-label columns:
+Actual / Predicted	Unsuitable	Suitable
+Unsuitable	6	2
+Suitable	0	2
 
-cv = pd.read_csv("data/cv.csv")
-jobs = pd.read_csv("data/job.csv")
-matches = pd.read_csv("data/matches.csv")
 
-# Take a small sample
-small_cv = cv.head(30)
-small_jobs = jobs.head(10)
+There were two false positives and no false negatives. These metrics measure agreement with the development annotations, not independently established hiring suitability.
+Earlier extraction and ranking baselines
+The supplied earlier README records mean per-resume extraction precision/recall/F1 of 0.56/0.97/0.70 for the baseline dictionary and 0.57/0.96/0.70 after generic-term filtering. These in-dataset measurements use supplied labels and a dictionary built from the same source data; they are separate from held-out classifier evaluation.
 
-# Keep only matches related to those selected CVs and jobs
-small_matches = matches[
-    matches["candidate_id"].isin(small_cv["candidate_id"]) &
-    matches["job_id"].isin(small_jobs["job_id"])
-]
+Earlier ranking validation covered 348 pairs across 30 candidates, with mean Spearman correlation 0.1809, mean NDCG@5 0.9696, and top-1 agreement 30%. Its references are supplied proxy scores, not independently reviewed relevance judgments. These historical results do not establish full-dataset matching accuracy.
+Python-JavaScript parity
+Recorded Node verification covered 23 text cases, including all ten validation pairs, and three boundary vectors. Twenty-one valid text pairs plus three boundary cases had exact classification agreement (24/24); skill sets agreed for 21/21 valid text pairs. The largest reported numerical difference was approximately 7.11e-15.
 
-# Save them as new files
-small_cv.to_csv("data/small_cv.csv", index=False)
-small_jobs.to_csv("data/small_jobs.csv", index=False)
-small_matches.to_csv("data/small_matches.csv", index=False)
+Node parity, production builds, and frontend tests passed in the recorded checks. A user screenshot also shows results rendered in a browser. Complete desktop/mobile acceptance, upload-format testing, console/network inspection, and browser-engine parity remain unverified in the reports reviewed for this README.
+Project structure
+The main working paths are:
+Path	Purpose
+frontend/	React application, document parsing, styling, and frontend tests
+frontend/src/inference/milestone3.mjs	Browser inference engine
+frontend/public/models/milestone3/v1/assets.json	Public model and preprocessing JSON
+notebooks/01_data_preprocessing_and_eda.ipynb	Data preparation and EDA
+notebooks/02_skill_extraction_and_similarity.ipynb	Baseline extraction and similarity
+notebooks/03_model_training_and_comparison.ipynb	Frozen-model results, evaluation, and feedback
+src/milestone3.py	Verified frozen-model loading and shared feature logic
+src/milestone3_training.py	Explicit Logistic Regression reproduction workflow
+src/milestone3_evaluation.py	Held-out evaluation and skill-gap feedback
+src/milestone3_export.py	Explicit browser export and Python reference generation
+data/labeled/	Master review and development-label datasets
+data/processed/milestone3/v2/	Saved splits and train/validation features
+models/milestone3/v2/	Frozen Python model and preprocessing artifacts
+models/browser/v1/	Versioned browser export and integrity metadata
+reports/milestone3/	Training, evaluation, reproduction, and export reports
+reports/frontend/	Frontend implementation and verification records
+tests/	Python checks and Node parity verifier
 
-print("Small dataset created successfully.")
-print("CVs:", small_cv.shape)
-print("Jobs:", small_jobs.shape)
-print("Matches:", small_matches.shape)
-```
 
-</details>
+Older API, Docker, embedding, or comparison artifacts may remain as historical files. They are not required for the current browser-only application.
+Python setup and reproduction
+The recorded Python workflows used Python 3.12. Create an environment from the repository root:
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m jupyter lab
+Select that environment as the notebook kernel. The frozen-model loader checks recorded package versions and artifact hashes. If it reports incompatibility, inspect reports/milestone3/v2/versions.json and the reproduction guide rather than bypassing its checks.
+
+Notebook 01 may download NLTK resources and overwrite processed exports. Preserve existing outputs before rerunning preprocessing. Ordinary execution of the current Milestone 3 notebook loads frozen results; it does not retrain the classifier.
+Intentional training reproduction
+Read [the reproduction guide](reports/milestone3/training_reproduction.md) first. From the project root, use an unused output version:
+.\.venv\Scripts\python.exe -m src.milestone3_training --root . --output-version v3
+This explicitly trains a new reproduction version using the saved split assignments and validation procedure. It refuses to overwrite existing version folders. Do not run it merely to start the website.
+Export and parity verification
+.\.venv\Scripts\python.exe -m src.milestone3_export --root .
+node tests/verify_browser_parity.mjs . .\.venv\Scripts\python.exe v1
+Use the compatible recorded Python environment. Export reads frozen assets without training; the parity verifier compares JavaScript against Python without fitting models.
+Reports
+- [Training and validation](reports/milestone3/v2/training_validation_report.md)
+- [Readable held-out test summary](reports/milestone3/test_evaluation/v2/test_evaluation_summary.md)
+- [Detailed held-out test evaluation](reports/milestone3/test_evaluation/v2/test_evaluation_report.md)
+- [Training reproduction](reports/milestone3/training_reproduction.md)
+- [Browser export and parity](reports/milestone3/browser_export_report.md)
+- [Initial frontend implementation](reports/frontend/milestone4_implementation_v1.md)
+- [Frontend readability and verification](reports/frontend/milestone4_readability_and_verification_v2.md)
+These reports describe the versions tested at the time. Later UI copy changes do not change historical model metrics.
+Limitations and next steps
+- The development dataset is small and most labels are automated.
+- The held-out test has ten pairs, only two suitable examples, and no Finance examples.
+- Sales has no suitable development examples; five suitable IT examples share one help-desk job.
+- Exact dictionary matching may miss unfamiliar skills and include generic terms. Similarity does not establish equivalent responsibilities or experience.
+- The current features do not explicitly compare education, seniority, or years of experience.
+- Complex PDF layouts, scanned documents, and unusual DOCX formatting need additional parsing checks.
+- Complete browser acceptance and the published deployment need their own verification evidence.
+Future work includes broader independently reviewed data, improved skill dictionaries, validated education/experience features, semantic embeddings, OCR, and curated learning resources. These are extensions rather than requirements for local browser inference.
+Team
+Mariam, Sadin, Rowan, Khalfawy, Belal, and Omar.
